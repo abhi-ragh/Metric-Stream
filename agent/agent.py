@@ -1,5 +1,4 @@
 from datetime import datetime
-import sqlite3 as sql
 import psutil
 import time
 
