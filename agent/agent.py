@@ -2,6 +2,8 @@ from datetime import datetime
 import psutil
 import time
 
+date = datetime.today().strftime("%d-%m-%Y")
+
 prev_bytes_recv = psutil.net_io_counters().bytes_recv
 prev_bytes_sent = psutil.net_io_counters().bytes_sent
 
