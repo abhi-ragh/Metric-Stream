@@ -8,8 +8,8 @@ def connect_db(date):
         cpu REAL,
         mem REAL,
         disk REAL,
-        bytes_recv REAL,
-        bytes_send REAL
+        net_send REAL,
+        net_recv REAL
     );
     """)
     conn.commit()
