@@ -1,7 +1,7 @@
 import sqlite3 as sql
 
 def connect_db():
-    conn = sql.connect("metrics.db")
+    conn = sql.connect("data/metrics.db")
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS metrics (
