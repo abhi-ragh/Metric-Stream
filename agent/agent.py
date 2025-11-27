@@ -3,8 +3,6 @@ import psutil
 import time
 import requests
 
-date = datetime.today().strftime("%d-%m-%Y")
-
 prev_bytes_recv = psutil.net_io_counters().bytes_recv
 prev_bytes_sent = psutil.net_io_counters().bytes_sent
 
@@ -19,7 +17,7 @@ while True:
     prev_bytes_recv = curr_bytes_recv
     prev_bytes_sent = curr_bytes_send
     payload = {
-        "date": date, 
+        "id": "agent",
         "cpu_usage": cpu_usage, 
         "mem_usage": mem_usage, 
         "disk_usage": disk_usage,

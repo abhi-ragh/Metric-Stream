@@ -1,10 +1,13 @@
 import sqlite3 as sql
 
-def connect_db(date):
-    conn = sql.connect(f"data/{date}.db")
+def connect_db():
+    conn = sql.connect("metrics.db")
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS metrics (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        device TEXT DEFAULT 'agent',
+        ts TEXT NOT NULL,
         cpu REAL,
         mem REAL,
         disk REAL,
@@ -12,5 +15,6 @@ def connect_db(date):
         bytes_send REAL
     );
     """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_metrics_ts ON metrics(ts);")
     conn.commit()
     return conn
