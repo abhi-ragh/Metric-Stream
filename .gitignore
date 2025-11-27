@@ -206,5 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Data folder 
-api/data
+#folders
+api/db/*
+agent/config.json

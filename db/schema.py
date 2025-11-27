@@ -1,7 +1,7 @@
 import sqlite3 as sql
 
 def connect_db():
-    conn = sql.connect("data/metrics.db")
+    conn = sql.connect("db/metrics.db")
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS metrics (
@@ -16,5 +16,13 @@ def connect_db():
     );
     """)
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_metrics_ts ON metrics(ts);")
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS agents (
+        agent_id TEXT PRIMARY KEY,
+        Name TEXT,
+        Hash TEXT             
+    ); 
+    """)
+    
     conn.commit()
     return conn
