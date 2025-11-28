@@ -12,6 +12,7 @@ router = APIRouter()
 
 class Metrics(BaseModel):
     id: str
+    token: str
     cpu_usage: float
     mem_usage: float
     disk_usage: float
@@ -20,12 +21,13 @@ class Metrics(BaseModel):
 
 subscribers = set()
 
-
-# TODO : Move Verification into Metrics 
-
-
 @router.post("/metrics")
 async def write_metrics(payload: Metrics):
+    response = verify_token(payload.token, payload.id)
+    if response["Verification"] == "Failed":
+        return {
+            "Verification": "Failed"
+        }
     ts = datetime.now().isoformat()
     conn = connect_db()
     cursor = conn.cursor()
@@ -95,11 +97,10 @@ async def stream(request: Request):
 
 @router.post("/register")
 def register(name):
-    SECRET_SALT = b"your-secret-salt"
-    agent_id = os.urandom(32).hex()
+    SECRET_SALT = b"secretsalt"
+    agent_id = os.urandom(16).hex()
     token = os.urandom(32).hex()
     hash_value = hashlib.sha256(token.encode() + SECRET_SALT).hexdigest()
-
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -111,18 +112,18 @@ def register(name):
         "agent_id": agent_id,
         "token": token
     }
-
-@router.get("/verify")
-def verify(api_token, agent_id):
-    SECRET_SALT = b"your-secret-salt"
+def verify_token(api_token, agent_id):
+    SECRET_SALT = b"secretsalt"
     hash_value = hashlib.sha256(api_token.encode() + SECRET_SALT).hexdigest()
-
     conn = connect_db()
     cursor = conn.cursor()
 
     og_hash = cursor.execute("SELECT Hash FROM agents WHERE agent_id = ?", (agent_id,)).fetchone()[0]
-
     if hash_value == og_hash:
-        return 1
+        return {
+            "Verification": "Success"
+        }
     else:
-        return 0
+        return {
+            "Verification": "Failed"
+        }
