@@ -1,0 +1,4 @@
+1. API Verification between Dashboard and API 
+2. Create a Secret_Salt 
+3. Error Handling in several areas
+4......
